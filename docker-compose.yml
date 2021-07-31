@@ -1,0 +1,29 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    depends_on:
+      - database
+    links:
+      - database
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app
+    env_file:
+      - ./.rails_env.dev
+    command: sh -c 'bundle exec rails s -p 3000 -b 0.0.0.0'
+
+  database:
+    image: postgres:12.1
+    restart: always
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    environment:
+      - ./.database_env.dev
+
+volumes:
+  db_data:

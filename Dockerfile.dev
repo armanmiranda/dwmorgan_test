@@ -1,0 +1,26 @@
+FROM ruby:2.7.0-alpine
+
+ARG RAILS_ROOT=/app
+ARG BUILD_PACKAGES="build-base g++ gcc make"
+ARG DEV_PACKAGES="postgresql-dev"
+ARG RUBY_PACKAGES="tzdata"
+
+# Administrative Configurations
+RUN apk update \
+    && apk upgrade \
+    && apk add --update --no-cache \
+    $BUILD_PACKAGES \
+    $DEV_PACKAGES \
+    $RUBY_PACKAGES
+
+# Ruby Configurations
+ENV BUNDLER_VERSION=2.1.2
+WORKDIR $RAILS_ROOT
+
+COPY Gemfile Gemfile.lock ./
+RUN gem install 'bundler:2.1.2'
+RUN bundle check || bundle install
+COPY . ./
+
+EXPOSE 3000
+CMD ['bundle', 'exec', 'rails', 'start']
