@@ -13,6 +13,8 @@ application up and running.
 		* Docker: `20.10.7`
 		* Docker Compose: `1.29.2`
 
+`Note:` Make sure to run on `develop` branch
+
 ## Local Setup
 ### Setting up dependencies:
 * Installing Ruby
